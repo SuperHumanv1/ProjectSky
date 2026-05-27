@@ -3,17 +3,16 @@ import requests
 
 app = Flask(__name__)
 
-# เปลี่ยนตรงนี้เป็น URL ของ Gist ของคุณที่ลงท้ายด้วย /raw
+# เปลี่ยนตัวนี้ให้เป็น URL หลักของ Gist (ไม่ต้องมี /raw ต่อท้าย)
 GIST_BASE_URL = "https://gist.githubusercontent.com/SuperHumanv1/"
 
-@app.route('/<script_name>')
-def get_script(script_name):
-    # ดึงโค้ดจาก Gist ของคุณ
-    url = f"{GIST_BASE_URL}{script_name}/raw"
+@app.route('/<gist_id>')
+def get_script(gist_id):
+    # ปรับ URL ให้ดึงจาก ID ของ Gist ที่คุณสร้าง
+    url = f"{GIST_BASE_URL}{gist_id}/raw"
     try:
         response = requests.get(url)
         if response.status_code == 200:
-            # ส่งค่ากลับเป็น text/plain (Roblox ต้องการแบบนี้)
             return Response(response.text, mimetype='text/plain')
         else:
             return "404 Not Found", 404
